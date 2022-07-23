@@ -10,17 +10,9 @@ public class Change {
     private int sum = 0;
     private List<Integer> coins = new ArrayList<>();
 
-    public Change(int moneyIn) {
-        this.moneyIn = moneyIn;
-        prepareCoins();
-        moneyIntoCoins();
-        countCoins();
-    }
-
     public Change(String money) {
         splitMoney(money);
-        prepareCoins();
-        moneyIntoCoins();
+        centsIntoCoins();
         countCoins();
     }
 
@@ -28,49 +20,27 @@ public class Change {
         String[] splittedMoney = new String[2];
         splittedMoney = money.split(",");
         Arrays.stream(splittedMoney).forEach(split -> split = split.replaceAll("\\D++", ""));
-        moneyIn = Integer.valueOf(splittedMoney[0]);
-        if (splittedMoney[1].length() > 2) {
-            splittedMoney[1].subSequence(0, 2);
-        }
-        if (splittedMoney[1].length() < 2) {
-            centsIn = Integer.valueOf(splittedMoney[1]) * 10;
-        } else
+        convertToCents(splittedMoney);
+    }
+
+    private void convertToCents(String[] splittedMoney) {
+        moneyIn = Integer.valueOf(splittedMoney[0]) * 100;
+        if (splittedMoney.length < 2)
+            centsIn = 0;
+        else
             centsIn = Integer.valueOf(splittedMoney[1]);
-
+        centsIn += moneyIn;
     }
 
-    private void prepareCoins() {
-        for (int i = 0; i <= Coin.values().length; i++) {
-            coins.add(0);
-        }
-    }
-
-    private void moneyIntoCoins() {
-
+    private void centsIntoCoins() {
         for (Coin value : Coin.values()) {
             int coinsAmount = 0;
-            int coinValue = value.getValue();
-
-            if (value.getOrder() > 1) {
-                while (centsIn >= coinValue) {
-                    coinsAmount++;
-                    centsIn -= coinValue;
-                    if (centsIn < coinValue) {
-                        coins.add(value.getOrder(), coinsAmount);
-                        break;
-                    }
-                }
-            } else {
-                while (moneyIn >= coinValue) {
-                    coinsAmount++;
-                    moneyIn -= coinValue;
-                    if (moneyIn < coinValue) {
-                        coins.add(value.getOrder(), coinsAmount);
-                        break;
-                    }
-                }
+            int coinValue = value.getValueInCents();
+            while (centsIn >= coinValue) {
+                coinsAmount++;
+                centsIn -= coinValue;
             }
-
+            coins.add(value.getOrder(), coinsAmount);
         }
     }
 
@@ -100,8 +70,11 @@ public class Change {
         String one = "(" + coins.get(1) + ") 1 euro coins, ";
         String fifty = "(" + coins.get(2) + ") 50 cents coins, ";
         String twenty = "(" + coins.get(3) + ") 20 cents coins, ";
-        String ten = "(" + coins.get(4) + ") 10 cent coins, ";
-        return sum + " coins. " + two + one + fifty + twenty + ten;
+        String ten = "(" + coins.get(4) + ") 10 cents coins, ";
+        String fiveC = "(" + coins.get(5) + ") 5 cents coins, ";
+        String twoC = "(" + coins.get(6) + ") 2 cents coins, ";
+        String oneC = "(" + coins.get(7) + ") 1 cent coins.";
+        return sum + " coins. " + two + one + fifty + twenty + ten + fiveC + twoC + oneC;
     }
 
 }
