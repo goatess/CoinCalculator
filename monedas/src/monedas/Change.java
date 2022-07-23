@@ -29,7 +29,13 @@ public class Change {
         splittedMoney = money.split(",");
         Arrays.stream(splittedMoney).forEach(split -> split = split.replaceAll("\\D++", ""));
         moneyIn = Integer.valueOf(splittedMoney[0]);
-        centsIn = Integer.valueOf(splittedMoney[1]);
+        if (splittedMoney[1].length() > 2) {
+            splittedMoney[1].subSequence(0, 2);
+        }
+        if (splittedMoney[1].length() < 2) {
+            centsIn = Integer.valueOf(splittedMoney[1]) * 10;
+        } else
+            centsIn = Integer.valueOf(splittedMoney[1]);
 
     }
 
@@ -40,23 +46,31 @@ public class Change {
     }
 
     private void moneyIntoCoins() {
-        int coin = 0;
 
-        while (moneyIn > 0) {
-            if (moneyIn % Coin.TWO_EURO.getValue() == 0) {
-                coins.add(0, coin + 1);
-                moneyIn -= Coin.TWO_EURO.getValue();
-            } else if (moneyIn % Coin.ONE_EURO.getValue() == 0) {
-                coins.add(1, coin + 1);
-                moneyIn -= Coin.ONE_EURO.getValue();
-            }
-        }
+        for (Coin value : Coin.values()) {
+            int coinsAmount = 0;
+            int coinValue = value.getValue();
 
-        while (centsIn > 10) {
-            if (centsIn % Coin.FIFTY_CENT.getValue() == 0) {
-                coins.add(2, coin + 1);
-                centsIn -= Coin.FIFTY_CENT.getValue();
+            if (value.getOrder() > 1) {
+                while (centsIn >= coinValue) {
+                    coinsAmount++;
+                    centsIn -= coinValue;
+                    if (centsIn < coinValue) {
+                        coins.add(value.getOrder(), coinsAmount);
+                        break;
+                    }
+                }
+            } else {
+                while (moneyIn >= coinValue) {
+                    coinsAmount++;
+                    moneyIn -= coinValue;
+                    if (moneyIn < coinValue) {
+                        coins.add(value.getOrder(), coinsAmount);
+                        break;
+                    }
+                }
             }
+
         }
     }
 
@@ -82,7 +96,12 @@ public class Change {
 
     @Override
     public String toString() {
-        return sum + " coins.";
+        String two = "(" + coins.get(0) + ") 2 euro coins, ";
+        String one = "(" + coins.get(1) + ") 1 euro coins, ";
+        String fifty = "(" + coins.get(2) + ") 50 cents coins, ";
+        String twenty = "(" + coins.get(3) + ") 20 cents coins, ";
+        String ten = "(" + coins.get(4) + ") 10 cent coins, ";
+        return sum + " coins. " + two + one + fifty + twenty + ten;
     }
 
 }
