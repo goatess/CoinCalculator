@@ -2,22 +2,25 @@ package monedas;
 
 public enum Coin {
     
-    TWO_EURO(2,0),
-    ONE_EURO(1,1),
+    TWO_EURO(200,0),
+    ONE_EURO(100,1),
     FIFTY_CENT(50,2),
     TWENTY_CENT(20,3),
-    TEN_CENT(10,4);
+    TEN_CENT(10,4),
+    FIVE_CENT(5,5),
+    TWO_CENT(2,6),
+    ONE_CENT(1,7);
     
 
-    int value;
+    int valueInCents;
     int order;
-    private Coin(int value, int order){
-        this.value = value;
+    private Coin(int valueInCents, int order){
+        this.valueInCents = valueInCents;
         this.order = order;
     }
 
-    public int getValue() {
-        return value;
+    public int getValueInCents() {
+        return valueInCents;
     }
 
     public int getOrder() {
