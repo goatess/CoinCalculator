@@ -10,10 +10,23 @@ public class Change {
     private int sum = 0;
     private List<Integer> coins = new ArrayList<>();
 
-    public Change(String money) {
-        splitMoney(money);
-        centsIntoCoins();
+    public Change(String moneyIn) {
+        splitMoney(moneyIn);
         countCoins();
+        sumCoins();
+    }
+
+    public Change(int moneyIn) {
+        centsIn = moneyIn * 100;
+        countCoins();
+        sumCoins();
+    }
+
+    public Change(float moneyIn) {
+        moneyIn = moneyIn * 100;
+        centsIn = Math.round(moneyIn);
+        countCoins();
+        sumCoins();
     }
 
     private void splitMoney(String money) {
@@ -35,7 +48,7 @@ public class Change {
         centsIn += moneyIn;
     }
 
-    private void centsIntoCoins() {
+    private void countCoins() {
         for (Coin value : Coin.values()) {
             int coinsAmount = 0;
             int coinValue = value.getValueInCents();
@@ -48,7 +61,7 @@ public class Change {
         }
     }
 
-    private void countCoins() {
+    private void sumCoins() {
         coins.forEach(coin -> sum += coin);
     }
 

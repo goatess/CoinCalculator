@@ -85,4 +85,20 @@ public class ChangeTest {
         String changeCoins = change.toString();
         assertEquals(COINS, changeCoins);
     }
+
+    @Test
+    public void get_money_change_with_integer_input() {
+        final String COINS = "16 coins. (16) TWO_EURO coins, ";
+        Change change = new Change(32);
+        String changeCoins = change.toString();
+        assertEquals(COINS, changeCoins);
+    }
+
+    @Test
+    public void get_money_change_with_float_input() {
+        final String COINS = "19 coins. (16) TWO_EURO coins, (1) FIFTY_CENT coins, (1) TWENTY_CENT coins, (1) FIVE_CENT coins, ";
+        Change change = new Change(32.75f);
+        String changeCoins = change.toString();
+        assertEquals(COINS, changeCoins);
+    }
 }
