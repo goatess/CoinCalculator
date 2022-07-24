@@ -101,4 +101,20 @@ public class ChangeTest {
         String changeCoins = change.toString();
         assertEquals(COINS, changeCoins);
     }
+
+    @Test
+    public void get_money_change_with_only_cents_input() {
+        final String COINS = "3 coins. (2) TWENTY_CENT coins, (1) FIVE_CENT coins, ";
+        Change change = new Change("45cent");
+        String changeCoins = change.toString();
+        assertEquals(COINS, changeCoins);
+    }
+
+    @Test
+    public void get_money_change_with_no_cents_input() {
+        final String COINS = "23 coins. (22) TWO_EURO coins, (1) ONE_EURO coins, ";
+        Change change = new Change("45€");
+        String changeCoins = change.toString();
+        assertEquals(COINS, changeCoins);
+    }
 }
