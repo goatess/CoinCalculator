@@ -7,11 +7,13 @@ import java.util.List;
 public class Change {
     private int moneyIn;
     private int centsIn;
+    private String money;
     private int sum = 0;
     private List<Integer> coins = new ArrayList<>();
 
-    public Change(String moneyIn) {
-        splitMoney(moneyIn);
+    public Change(String money) {
+        this.money = money;
+        convertToCents(money);
         countCoins();
         sumCoins();
     }
@@ -29,18 +31,21 @@ public class Change {
         sumCoins();
     }
 
-    private void splitMoney(String money) {
+    private void convertToCents(String money) {
         String[] splittedMoney = new String[2];
-        splittedMoney = money.split(",");
+        splittedMoney = money.split(",|cent|€");
         Arrays.stream(splittedMoney).forEach(split -> split = split.replaceAll("\\D++", ""));
-        convertToCents(splittedMoney);
-    }
 
-    private void convertToCents(String[] splittedMoney) {
-        moneyIn = Integer.valueOf(splittedMoney[0]) * 100;
-        if (splittedMoney.length < 2)
-            centsIn = 0;
-        else {
+        if (splittedMoney.length < 2) {
+            if ((!money.contains("€") && money.contains("cent"))) {
+                moneyIn = 0;
+                centsIn = Integer.valueOf(splittedMoney[0]);
+            } else{
+                moneyIn = Integer.valueOf(splittedMoney[0]) * 100;
+                centsIn = 0;
+            }
+        } else {
+            moneyIn = Integer.valueOf(splittedMoney[0]) * 100;
             splittedMoney[1] = splittedMoney[1] + 0;
             splittedMoney[1] = splittedMoney[1].substring(0, 2);
             centsIn = Integer.valueOf(splittedMoney[1]);
