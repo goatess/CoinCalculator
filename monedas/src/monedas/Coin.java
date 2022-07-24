@@ -12,8 +12,9 @@ public enum Coin {
     ONE_CENT(1,7);
     
 
-    int valueInCents;
-    int order;
+    private int valueInCents;
+    private int order;
+
     private Coin(int valueInCents, int order){
         this.valueInCents = valueInCents;
         this.order = order;
@@ -26,5 +27,4 @@ public enum Coin {
     public int getOrder() {
         return order;
     }
-    
 }
